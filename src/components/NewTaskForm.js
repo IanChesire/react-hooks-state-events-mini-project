@@ -1,11 +1,12 @@
 import React from "react";
 
-function NewTaskForm() {
+function NewTaskForm({categories}) {
 
-  // function newTask(e) {
-  //   e.preventDefault();
+  function submitForm(e) {
+    
+    e.preventDefault();
 
-  // }
+  }
   return (
     <form className="new-task-form">
       <label>
@@ -16,10 +17,10 @@ function NewTaskForm() {
         Category
         <select name="category">
           {/* render <option> elements for each category here */}
-          
+          {/* {categories.filter((categories, index))} */}
         </select>
       </label>
-      <input type="submit" value="Add task"  />
+      <input type="submit" value="Add task" onSubmit={submitForm} />
     </form>
   );
 }
