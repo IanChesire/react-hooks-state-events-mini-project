@@ -1,53 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
+
 
 function NewTaskForm({ categories, onTaskFormSubmit }) {
-  const [formData, setFormData] = useState({
-    text: "",
-    category: categories[0], 
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onTaskFormSubmit(formData);
-    
-    setFormData({
-      text: "",
-      category: categories[0],
-    });
-  };
-
-  return (
-    <form className="new-task-form" onSubmit={handleSubmit}>
-      <label>
-        Details
-        <input
-          type="text"
-          name="text"
-          value={formData.text}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Category
-        <select name="category" value={formData.category} onChange={handleChange} onClick={onTaskFormSubmit}>
-          {categories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-      </label>
-      <input type="submit" value="Add task" />
-    </form>
-  );
-}
+    const [formData, setFormData] = useState({ text: "", category: "" });
+    const optionsList = categories.map((category) => (
+      <option key={category} value={category}>
+        {category}
+      </option>
+    ));
+  
+    const handleOnChange = (e) => {
+      const newObj = { ...formData, [e.target.name]: e.target.value };
+      setFormData(newObj);
+    };
+  
+    const handleFormSubmit = (e) => {
+      e.preventDefault();
+      onTaskFormSubmit(formData);
+    };
+  
+    return (
+      <form className="new-task-form" onSubmit={handleFormSubmit}>
+        <label>
+          Details
+          <input
+            type="text"
+            name="text"
+            value={formData.text}
+            onChange={handleOnChange}
+          />
+        </label>
+        <label>
+          Category
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleOnChange}
+          >
+            {optionsList}
+          </select>
+        </label>
+        <input type="submit" value="Add task" />
+      </form>
+    );
+  }
 
 export default NewTaskForm;

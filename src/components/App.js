@@ -8,32 +8,56 @@ console.log("Here's the data you're working with");
 console.log({ CATEGORIES, TASKS });
 
 function App() {
-  
-  const [filteredTasks, setFilteredTasks] = useState(TASKS)
-  const [newTask, setNewTask] = useState("");
+  const [taskItems, setTaskItems] = useState(TASKS);
+  const [currectSelectedButtonIndex, setCurrectSelectedButtonIndex] =
+    useState(0);
 
-  function handleCategorySelect (selectedCategory) {
-    if (selectedCategory === "All") {
-      setFilteredTasks(TASKS);
-    }
-    else {
-      const filtered = TASKS.filter (task => task.category === selectedCategory);
-      setFilteredTasks(filtered);
-    }
-  }
+  const changeSelectedButton = (index) => {
+    setCurrectSelectedButtonIndex(index);
+  };
 
-  function handleSubmitForm (e) {
-      setNewTask(e.target.value)
+  const deleteTask = (taskIndex) => {
+    const newTasks = taskItems.filter((_, index) => {
+      if (index !== taskIndex) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    setTaskItems(newTasks);
+  };
+
+  const addTask = (task) => {
+    const newTasks = [...taskItems, task];
+    setTaskItems(newTasks);
+    console.log(newTasks);
+  };
+
+  const filteredTasks = taskItems.filter((task) => {
+    if (CATEGORIES[currectSelectedButtonIndex] === "All") {
+      return true;
+    } else {
+      return task.category === CATEGORIES[currectSelectedButtonIndex];
     }
+  });
 
   return (
     <div className="App">
       <h2>My tasks</h2>
-      <CategoryFilter  categories={CATEGORIES} onCategorySelect={handleCategorySelect}/>
-      <NewTaskForm categories={CATEGORIES} onTaskFormSubmit={handleSubmitForm}/>
-      <TaskList tasks={filteredTasks} categories={CATEGORIES}/>
+      <CategoryFilter
+        categories={CATEGORIES}
+        categoryIndex={currectSelectedButtonIndex}
+        onSelectedButtonChange={changeSelectedButton}
+      />
+      <NewTaskForm
+        categories={CATEGORIES.slice(1)}
+        onTaskFormSubmit={addTask}
+      />
+      <TaskList tasks={filteredTasks} onTaskDelete={deleteTask} />
     </div>
   );
 }
+
 
 export default App;
